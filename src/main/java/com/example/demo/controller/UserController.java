@@ -4,6 +4,7 @@ import com.example.demo.constants.GlobalConstants;
 import com.example.demo.dto.Authentication;
 import com.example.demo.dto.LoginRequestDto;
 import com.example.demo.dto.UserRequestDto;
+import com.example.demo.entity.Role;
 import com.example.demo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -30,7 +31,8 @@ public class UserController {
     public void loginWithEmail(@RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
         Authentication authentication = userService.loginUser(loginRequestDto);
         HttpSession session = request.getSession();
-        session.setAttribute(GlobalConstants.USER_AUTH, authentication);
+        String authRole = authentication.getRole() == Role.USER ? GlobalConstants.USER_AUTH : GlobalConstants.ADMIN_AUTH;
+        session.setAttribute(authRole, authentication);
     }
 
     @PostMapping("/logout")
