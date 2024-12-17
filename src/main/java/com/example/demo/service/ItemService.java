@@ -18,11 +18,11 @@ public class ItemService {
     }
 
     @Transactional
-    public void createItem(String name, String description, Long ownerId, Long managerId) {
+    public void createItem(String name, String description, Long ownerId, Long managerId, String status) {
         User owner = userRepository.findById(ownerId).orElseThrow(() -> new IllegalArgumentException("해당 ID에 맞는 값이 존재하지 않습니다."));
         User manager = userRepository.findById(managerId).orElseThrow(() -> new IllegalArgumentException("해당 ID에 맞는 값이 존재하지 않습니다."));
 
-        Item item = new Item(name, description, owner, manager);
+        Item item = new Item(name, description, owner, manager, status);
         itemRepository.save(item);
     }
 }

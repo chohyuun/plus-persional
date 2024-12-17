@@ -18,9 +18,10 @@ public class ItemController {
 
     @PostMapping
     public void createItem(@RequestBody ItemRequestDto itemRequestDto) {
-         itemService.createItem(itemRequestDto.getName(),
-                                itemRequestDto.getDescription(),
-                                itemRequestDto.getOwnerId(),
-                                itemRequestDto.getManagerId());
+        itemService.createItem(itemRequestDto.getName(),
+                itemRequestDto.getDescription(),
+                itemRequestDto.getOwnerId(),
+                itemRequestDto.getManagerId(),
+                itemRequestDto.getStatus());
     }
 }

@@ -11,4 +11,6 @@ public class ItemRequestDto {
     private Long managerId;
 
     private Long ownerId;
+
+    private String status;
 }

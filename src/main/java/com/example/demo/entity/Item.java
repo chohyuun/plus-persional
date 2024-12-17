@@ -1,12 +1,20 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
+import org.hibernate.annotations.DynamicInsert;
 
 
 @Entity
 @Getter
 // TODO: 6. Dynamic Insert
+@DynamicInsert
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +35,14 @@ public class Item {
     @Column(nullable = false, columnDefinition = "varchar(20) default 'PENDING'")
     private String status;
 
-    public Item(String name, String description, User manager, User owner) {
+    public Item(String name, String description, User manager, User owner, String status) {
         this.name = name;
         this.description = description;
         this.manager = manager;
         this.owner = owner;
+        this.status = status;
     }
 
-    public Item() {}
+    public Item() {
+    }
 }
