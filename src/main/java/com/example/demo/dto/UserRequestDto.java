@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import lombok.Getter;
 
@@ -8,10 +9,10 @@ public class UserRequestDto {
     private String email;
     private String nickname;
     private String password;
-    private String role;
+    private Role role;
 
     public UserRequestDto(String role, String email, String nickname, String password) {
-        this.role = role;
+        this.role = Role.of(role);
         this.email = email;
         this.nickname = nickname;
         this.password = password;
@@ -19,7 +20,7 @@ public class UserRequestDto {
 
     public User toEntity() {
         return new User(
-                this.role,
+                this.role.toString(),
                 this.email,
                 this.nickname,
                 this.password

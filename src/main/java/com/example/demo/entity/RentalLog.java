@@ -1,6 +1,11 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 
 @Entity
@@ -12,7 +17,7 @@ public class RentalLog {
 
     private String logMessage;
 
-    private String logType; // SUCCESS, FAILURE
+    private LogType logType; // SUCCESS, FAILURE
 
     @ManyToOne
     @JoinColumn(name = "reservation_id")
@@ -21,8 +26,9 @@ public class RentalLog {
     public RentalLog(Reservation reservation, String logMessage, String logType) {
         this.reservation = reservation;
         this.logMessage = logMessage;
-        this.logType = logType;
+        this.logType = LogType.of(logType);
     }
 
-    public RentalLog() {}
+    public RentalLog() {
+    }
 }

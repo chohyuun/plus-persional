@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/reservations")
@@ -32,8 +33,8 @@ public class ReservationController {
     }
 
     @PatchMapping("/{id}/update-status")
-    public void updateReservation(@PathVariable Long id, @RequestBody String status) {
-        reservationService.updateReservationStatus(id, status);
+    public void updateReservation(@PathVariable Long id, @RequestBody Map<String, String> status) {
+        reservationService.updateReservationStatus(id, status.get("status"));
     }
 
     @GetMapping

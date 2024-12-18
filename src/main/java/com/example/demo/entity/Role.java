@@ -14,6 +14,8 @@ public enum Role {
     }
 
     public static Role of(String roleName) {
+        roleName = roleName.toLowerCase();
+
         for (Role role : values()) {
             if (role.getName().equals(roleName)) {
                 return role;
