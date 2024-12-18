@@ -37,7 +37,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public void createReservation(Long itemId, Long userId, LocalDateTime startAt, LocalDateTime endAt) {
+    public ReservationResponseDto createReservation(Long itemId, Long userId, LocalDateTime startAt, LocalDateTime endAt, String status) {
         // 쉽게 데이터를 생성하려면 아래 유효성검사 주석 처리
         List<Reservation> haveReservations = reservationRepository.findConflictingReservations(itemId, startAt, endAt);
         if (!haveReservations.isEmpty()) {
@@ -46,11 +46,13 @@ public class ReservationService {
 
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("해당 ID에 맞는 값이 존재하지 않습니다."));
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 ID에 맞는 값이 존재하지 않습니다."));
-        Reservation reservation = new Reservation(item, user, Status.PENDING.toString(), startAt, endAt);
+        Reservation reservation = new Reservation(item, user, status, startAt, endAt);
         Reservation savedReservation = reservationRepository.save(reservation);
 
-        RentalLog rentalLog = new RentalLog(savedReservation, "로그 메세지", LogType.SUCCESS.toString());
+        RentalLog rentalLog = new RentalLog(savedReservation, "예약이 성공했습니다.", LogType.SUCCESS.toString());
         rentalLogService.save(rentalLog);
+
+        return new ReservationResponseDto(reservation.getId(), reservation.getUser().getNickname(), reservation.getItem().getName(), reservation.getStartAt(), reservation.getEndAt());
     }
 
     // TODO: 3. N+1 문제
@@ -99,9 +101,11 @@ public class ReservationService {
 
     // TODO: 7. 리팩토링
     @Transactional
-    public void updateReservationStatus(Long reservationId, String status) {
+    public ReservationResponseDto updateReservationStatus(Long reservationId, String status) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() -> new IllegalArgumentException("해당 ID에 맞는 데이터가 존재하지 않습니다."));
 
         reservation.updateStatus(Status.change(reservation.getStatus(), Status.of(status)));
+
+        return new ReservationResponseDto(reservation.getId(), reservation.getUser().getNickname(), reservation.getItem().getName(), reservation.getStartAt(), reservation.getEndAt());
     }
 }

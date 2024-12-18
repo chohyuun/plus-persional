@@ -25,16 +25,17 @@ public class ReservationController {
     }
 
     @PostMapping
-    public void createReservation(@RequestBody ReservationRequestDto reservationRequestDto) {
-        reservationService.createReservation(reservationRequestDto.getItemId(),
+    public ReservationResponseDto createReservation(@RequestBody ReservationRequestDto reservationRequestDto) {
+        return reservationService.createReservation(reservationRequestDto.getItemId(),
                 reservationRequestDto.getUserId(),
                 reservationRequestDto.getStartAt(),
-                reservationRequestDto.getEndAt());
+                reservationRequestDto.getEndAt(),
+                reservationRequestDto.getStatus());
     }
 
     @PatchMapping("/{id}/update-status")
-    public void updateReservation(@PathVariable Long id, @RequestBody Map<String, String> status) {
-        reservationService.updateReservationStatus(id, status.get("status"));
+    public ReservationResponseDto updateReservation(@PathVariable Long id, @RequestBody Map<String, String> status) {
+        return reservationService.updateReservationStatus(id, status.get("status"));
     }
 
     @GetMapping

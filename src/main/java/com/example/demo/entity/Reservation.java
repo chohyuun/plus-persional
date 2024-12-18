@@ -10,11 +10,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@DynamicInsert
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +41,7 @@ public class Reservation {
     public Reservation(Item item, User user, String status, LocalDateTime startAt, LocalDateTime endAt) {
         this.item = item;
         this.user = user;
-        this.status = Status.of(status);
+        this.status = status != null ? Status.of(status) : null;
         this.startAt = startAt;
         this.endAt = endAt;
     }

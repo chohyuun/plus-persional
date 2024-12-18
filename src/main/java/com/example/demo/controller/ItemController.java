@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ItemRequestDto;
+import com.example.demo.dto.ItemResponseDto;
 import com.example.demo.service.ItemService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,8 +18,8 @@ public class ItemController {
     }
 
     @PostMapping
-    public void createItem(@RequestBody ItemRequestDto itemRequestDto) {
-        itemService.createItem(itemRequestDto.getName(),
+    public ItemResponseDto createItem(@RequestBody ItemRequestDto itemRequestDto) {
+        return itemService.createItem(itemRequestDto.getName(),
                 itemRequestDto.getDescription(),
                 itemRequestDto.getOwnerId(),
                 itemRequestDto.getManagerId(),

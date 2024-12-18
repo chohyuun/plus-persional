@@ -3,7 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.constants.GlobalConstants;
 import com.example.demo.dto.Authentication;
 import com.example.demo.dto.LoginRequestDto;
+import com.example.demo.dto.SignupResponseDto;
 import com.example.demo.dto.UserRequestDto;
+import com.example.demo.dto.UserResponseDto;
 import com.example.demo.entity.Role;
 import com.example.demo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,16 +25,20 @@ public class UserController {
     }
 
     @PostMapping
-    public void signupWithEmail(@RequestBody UserRequestDto userRequestDto) {
-        userService.signupWithEmail(userRequestDto);
+    public SignupResponseDto signupWithEmail(@RequestBody UserRequestDto userRequestDto) {
+        return userService.signupWithEmail(userRequestDto);
     }
 
     @PostMapping("/login")
-    public void loginWithEmail(@RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
-        Authentication authentication = userService.loginUser(loginRequestDto);
+    public UserResponseDto loginWithEmail(@RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
+        UserResponseDto userResponseDto = userService.loginUser(loginRequestDto);
+        Authentication authentication = new Authentication(userResponseDto.getId(), userResponseDto.getRole());
+
         HttpSession session = request.getSession();
         String authRole = authentication.getRole() == Role.USER ? GlobalConstants.USER_AUTH : GlobalConstants.ADMIN_AUTH;
         session.setAttribute(authRole, authentication);
+
+        return userResponseDto;
     }
 
     @PostMapping("/logout")
